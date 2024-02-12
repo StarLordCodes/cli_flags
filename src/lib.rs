@@ -1,10 +1,10 @@
 /// A struct representing a command line flag.
 #[derive(Debug, Clone)]
 pub struct Flag {
-    flag: Option<String>, // The name of the flag
-    is_short: bool,       // Indicates if the flag is short (e.g., -f)
-    is_long: bool,        // Indicates if the flag is long (e.g., --flag)
-    arg: Option<String>,  // The argument associated with the flag, if any
+    pub flag: Option<String>, // The name of the flag
+    pub is_short: bool,       // Indicates if the flag is short (e.g., -f)
+    pub is_long: bool,        // Indicates if the flag is long (e.g., --flag)
+    pub arg: Option<String>,  // The argument associated with the flag, if any
 }
 
 /// Parses command line arguments into a vector of Flag structs.
