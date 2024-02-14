@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 /// A struct representing a command line flag.
 #[derive(Debug, Clone)]
 pub struct Flag {
@@ -89,11 +91,11 @@ pub trait ExtractFromVecFlags {
     /// Extracts all boolean flags without arguments.
     fn all_bool_flags(&self) -> Vec<String>;
     /// Extracts short flags along with their associated arguments.
-    fn short_flags_with_args(&self) -> Vec<(String, String)>;
+    fn short_flags_with_args(&self) -> HashMap<String, String>;
     /// Extracts long flags along with their associated arguments.
-    fn long_flags_with_args(&self) -> Vec<(String, String)>;
+    fn long_flags_with_args(&self) -> HashMap<String, String>;
     /// Extracts all flags along with their associated arguments.
-    fn all_flags_with_args(&self) -> Vec<(String, String)>;
+    fn all_flags_with_args(&self) -> HashMap<String, String>;
 }
 
 impl ExtractFromVecFlags for Vec<Flag> {
@@ -143,14 +145,11 @@ impl ExtractFromVecFlags for Vec<Flag> {
             .collect()
     }
 
-    fn short_flags_with_args(&self) -> Vec<(String, String)> {
+    fn short_flags_with_args(&self) -> HashMap<String, String> {
         self.iter()
             .filter_map(|flag_object| {
                 if flag_object.is_short && flag_object.arg.is_some() {
-                    Some((
-                        flag_object.flag.clone().unwrap(),
-                        flag_object.arg.clone().unwrap(),
-                    ))
+                    flag_object.flag.clone().zip(flag_object.arg.clone())
                 } else {
                     None
                 }
@@ -158,14 +157,11 @@ impl ExtractFromVecFlags for Vec<Flag> {
             .collect()
     }
 
-    fn long_flags_with_args(&self) -> Vec<(String, String)> {
+    fn long_flags_with_args(&self) -> HashMap<String, String> {
         self.iter()
             .filter_map(|flag_object| {
                 if flag_object.is_long && flag_object.arg.is_some() {
-                    Some((
-                        flag_object.flag.clone().unwrap(),
-                        flag_object.arg.clone().unwrap(),
-                    ))
+                    flag_object.flag.clone().zip(flag_object.arg.clone())
                 } else {
                     None
                 }
@@ -173,14 +169,11 @@ impl ExtractFromVecFlags for Vec<Flag> {
             .collect()
     }
 
-    fn all_flags_with_args(&self) -> Vec<(String, String)> {
-        self.iter()
+    fn all_flags_with_args(&self) -> HashMap<String, String> {
+         self.iter()
             .filter_map(|flag_object| {
                 if (flag_object.is_short || flag_object.is_long) && flag_object.arg.is_some() {
-                    Some((
-                        flag_object.flag.clone().unwrap(),
-                        flag_object.arg.clone().unwrap(),
-                    ))
+                    flag_object.flag.clone().zip(flag_object.arg.clone())
                 } else {
                     None
                 }
