@@ -78,13 +78,21 @@ fn check_flag(word: &str) -> &str {
     }
 }
 
+/// Trait for extracting various types of flags and arguments from a vector of Flag structs.
 pub trait ExtractFromVecFlags {
+    /// Extracts arguments without associated flags.
     fn flagless_args(&self) -> Vec<String>;
+    /// Extracts short boolean flags without arguments.
     fn short_bool_flags(&self) -> Vec<String>;
+    /// Extracts long boolean flags without arguments.
     fn long_bool_flags(&self) -> Vec<String>;
+    /// Extracts all boolean flags without arguments.
     fn all_bool_flags(&self) -> Vec<String>;
+    /// Extracts short flags along with their associated arguments.
     fn short_flags_with_args(&self) -> Vec<(String, String)>;
+    /// Extracts long flags along with their associated arguments.
     fn long_flags_with_args(&self) -> Vec<(String, String)>;
+    /// Extracts all flags along with their associated arguments.
     fn all_flags_with_args(&self) -> Vec<(String, String)>;
 }
 
