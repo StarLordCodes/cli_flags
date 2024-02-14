@@ -101,9 +101,9 @@ pub trait ExtractFromVecFlags {
 impl ExtractFromVecFlags for Vec<Flag> {
     fn flagless_args(&self) -> Vec<String> {
         self.iter()
-            .filter_map(|flag_object| {
-                if !(flag_object.is_short || flag_object.is_long) {
-                    flag_object.arg.clone()
+            .filter_map(|flag_obj| {
+                if !(flag_obj.is_short || flag_obj.is_long) {
+                    flag_obj.arg.clone()
                 } else {
                     None
                 }
@@ -112,9 +112,9 @@ impl ExtractFromVecFlags for Vec<Flag> {
     }
     fn short_bool_flags(&self) -> Vec<String> {
         self.iter()
-            .filter_map(|flag_object| {
-                if flag_object.is_short && flag_object.arg.is_none() {
-                    flag_object.flag.clone()
+            .filter_map(|flag_obj| {
+                if flag_obj.is_short && flag_obj.arg.is_none() {
+                    flag_obj.flag.clone()
                 } else {
                     None
                 }
@@ -123,9 +123,9 @@ impl ExtractFromVecFlags for Vec<Flag> {
     }
     fn long_bool_flags(&self) -> Vec<String> {
         self.iter()
-            .filter_map(|flag_object| {
-                if flag_object.is_long && flag_object.arg.is_none() {
-                    flag_object.flag.clone()
+            .filter_map(|flag_obj| {
+                if flag_obj.is_long && flag_obj.arg.is_none() {
+                    flag_obj.flag.clone()
                 } else {
                     None
                 }
@@ -135,9 +135,9 @@ impl ExtractFromVecFlags for Vec<Flag> {
 
     fn all_bool_flags(&self) -> Vec<String> {
         self.iter()
-            .filter_map(|flag_object| {
-                if (flag_object.is_short || flag_object.is_long) && flag_object.arg.is_none() {
-                    flag_object.flag.clone()
+            .filter_map(|flag_obj| {
+                if (flag_obj.is_short || flag_obj.is_long) && flag_obj.arg.is_none() {
+                    flag_obj.flag.clone()
                 } else {
                     None
                 }
@@ -147,9 +147,9 @@ impl ExtractFromVecFlags for Vec<Flag> {
 
     fn short_flags_with_args(&self) -> HashMap<String, String> {
         self.iter()
-            .filter_map(|flag_object| {
-                if flag_object.is_short && flag_object.arg.is_some() {
-                    flag_object.flag.clone().zip(flag_object.arg.clone())
+            .filter_map(|flag_obj| {
+                if flag_obj.is_short && flag_obj.arg.is_some() {
+                    flag_obj.flag.clone().zip(flag_obj.arg.clone())
                 } else {
                     None
                 }
@@ -159,9 +159,9 @@ impl ExtractFromVecFlags for Vec<Flag> {
 
     fn long_flags_with_args(&self) -> HashMap<String, String> {
         self.iter()
-            .filter_map(|flag_object| {
-                if flag_object.is_long && flag_object.arg.is_some() {
-                    flag_object.flag.clone().zip(flag_object.arg.clone())
+            .filter_map(|flag_obj| {
+                if flag_obj.is_long && flag_obj.arg.is_some() {
+                    flag_obj.flag.clone().zip(flag_obj.arg.clone())
                 } else {
                     None
                 }
@@ -170,10 +170,10 @@ impl ExtractFromVecFlags for Vec<Flag> {
     }
 
     fn all_flags_with_args(&self) -> HashMap<String, String> {
-         self.iter()
-            .filter_map(|flag_object| {
-                if (flag_object.is_short || flag_object.is_long) && flag_object.arg.is_some() {
-                    flag_object.flag.clone().zip(flag_object.arg.clone())
+        self.iter()
+            .filter_map(|flag_obj| {
+                if (flag_obj.is_short || flag_obj.is_long) && flag_obj.arg.is_some() {
+                    flag_obj.flag.clone().zip(flag_obj.arg.clone())
                 } else {
                     None
                 }
