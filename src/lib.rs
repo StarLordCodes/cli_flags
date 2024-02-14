@@ -77,3 +77,106 @@ fn check_flag(word: &str) -> &str {
         "argument"
     }
 }
+
+pub trait ExtractFromVecFlags {
+    fn flagless_args(&self) -> Vec<String>;
+    fn short_bool_flags(&self) -> Vec<String>;
+    fn long_bool_flags(&self) -> Vec<String>;
+    fn all_bool_flags(&self) -> Vec<String>;
+    fn short_flags_with_args(&self) -> Vec<(String, String)>;
+    fn long_flags_with_args(&self) -> Vec<(String, String)>;
+    fn all_flags_with_args(&self) -> Vec<(String, String)>;
+}
+
+impl ExtractFromVecFlags for Vec<Flag> {
+    fn flagless_args(&self) -> Vec<String> {
+        self.iter()
+            .filter_map(|flag_object| {
+                if !(flag_object.is_short || flag_object.is_long) {
+                    flag_object.arg.clone()
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+    fn short_bool_flags(&self) -> Vec<String> {
+        self.iter()
+            .filter_map(|flag_object| {
+                if flag_object.is_short && flag_object.arg.is_none() {
+                    flag_object.flag.clone()
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+    fn long_bool_flags(&self) -> Vec<String> {
+        self.iter()
+            .filter_map(|flag_object| {
+                if flag_object.is_long && flag_object.arg.is_none() {
+                    flag_object.flag.clone()
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+
+    fn all_bool_flags(&self) -> Vec<String> {
+        self.iter()
+            .filter_map(|flag_object| {
+                if (flag_object.is_short || flag_object.is_long) && flag_object.arg.is_none() {
+                    flag_object.flag.clone()
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+
+    fn short_flags_with_args(&self) -> Vec<(String, String)> {
+        self.iter()
+            .filter_map(|flag_object| {
+                if flag_object.is_short && flag_object.arg.is_some() {
+                    Some((
+                        flag_object.flag.clone().unwrap(),
+                        flag_object.arg.clone().unwrap(),
+                    ))
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+
+    fn long_flags_with_args(&self) -> Vec<(String, String)> {
+        self.iter()
+            .filter_map(|flag_object| {
+                if flag_object.is_long && flag_object.arg.is_some() {
+                    Some((
+                        flag_object.flag.clone().unwrap(),
+                        flag_object.arg.clone().unwrap(),
+                    ))
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+
+    fn all_flags_with_args(&self) -> Vec<(String, String)> {
+        self.iter()
+            .filter_map(|flag_object| {
+                if (flag_object.is_short || flag_object.is_long) && flag_object.arg.is_some() {
+                    Some((
+                        flag_object.flag.clone().unwrap(),
+                        flag_object.arg.clone().unwrap(),
+                    ))
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+}
