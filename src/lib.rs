@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 /// A struct representing a command line flag.
 #[derive(Debug, Clone)]
 pub struct Flag {
@@ -80,104 +78,109 @@ fn check_flag(word: &str) -> &str {
     }
 }
 
-/// Trait for extracting various types of flags and arguments from a vector of Flag structs.
-pub trait ExtractFromVecFlags {
-    /// Extracts arguments without associated flags.
-    fn flagless_args(&self) -> Vec<String>;
-    /// Extracts short boolean flags without arguments.
-    fn short_bool_flags(&self) -> Vec<String>;
-    /// Extracts long boolean flags without arguments.
-    fn long_bool_flags(&self) -> Vec<String>;
-    /// Extracts all boolean flags without arguments.
-    fn all_bool_flags(&self) -> Vec<String>;
-    /// Extracts short flags along with their associated arguments.
-    fn short_flags_with_args(&self) -> HashMap<String, String>;
-    /// Extracts long flags along with their associated arguments.
-    fn long_flags_with_args(&self) -> HashMap<String, String>;
-    /// Extracts all flags along with their associated arguments.
-    fn all_flags_with_args(&self) -> HashMap<String, String>;
-}
+pub mod traits {
+    use super::Flag;
+    use std::collections::HashMap;
 
-impl ExtractFromVecFlags for Vec<Flag> {
-    fn flagless_args(&self) -> Vec<String> {
-        self.iter()
-            .filter_map(|flag_obj| {
-                if !(flag_obj.is_short || flag_obj.is_long) {
-                    flag_obj.arg.clone()
-                } else {
-                    None
-                }
-            })
-            .collect()
-    }
-    fn short_bool_flags(&self) -> Vec<String> {
-        self.iter()
-            .filter_map(|flag_obj| {
-                if flag_obj.is_short && flag_obj.arg.is_none() {
-                    flag_obj.flag.clone()
-                } else {
-                    None
-                }
-            })
-            .collect()
-    }
-    fn long_bool_flags(&self) -> Vec<String> {
-        self.iter()
-            .filter_map(|flag_obj| {
-                if flag_obj.is_long && flag_obj.arg.is_none() {
-                    flag_obj.flag.clone()
-                } else {
-                    None
-                }
-            })
-            .collect()
+    /// Trait for extracting various types of flags and arguments from a vector of Flag structs.
+    pub trait ExtractFromVecFlags {
+        /// Extracts arguments without associated flags.
+        fn flagless_args(&self) -> Vec<String>;
+        /// Extracts short boolean flags without arguments.
+        fn short_bool_flags(&self) -> Vec<String>;
+        /// Extracts long boolean flags without arguments.
+        fn long_bool_flags(&self) -> Vec<String>;
+        /// Extracts all boolean flags without arguments.
+        fn all_bool_flags(&self) -> Vec<String>;
+        /// Extracts short flags along with their associated arguments.
+        fn short_flags_with_args(&self) -> HashMap<String, String>;
+        /// Extracts long flags along with their associated arguments.
+        fn long_flags_with_args(&self) -> HashMap<String, String>;
+        /// Extracts all flags along with their associated arguments.
+        fn all_flags_with_args(&self) -> HashMap<String, String>;
     }
 
-    fn all_bool_flags(&self) -> Vec<String> {
-        self.iter()
-            .filter_map(|flag_obj| {
-                if (flag_obj.is_short || flag_obj.is_long) && flag_obj.arg.is_none() {
-                    flag_obj.flag.clone()
-                } else {
-                    None
-                }
-            })
-            .collect()
-    }
+    impl ExtractFromVecFlags for Vec<Flag> {
+        fn flagless_args(&self) -> Vec<String> {
+            self.iter()
+                .filter_map(|flag_obj| {
+                    if !(flag_obj.is_short || flag_obj.is_long) {
+                        flag_obj.arg.clone()
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }
+        fn short_bool_flags(&self) -> Vec<String> {
+            self.iter()
+                .filter_map(|flag_obj| {
+                    if flag_obj.is_short && flag_obj.arg.is_none() {
+                        flag_obj.flag.clone()
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }
+        fn long_bool_flags(&self) -> Vec<String> {
+            self.iter()
+                .filter_map(|flag_obj| {
+                    if flag_obj.is_long && flag_obj.arg.is_none() {
+                        flag_obj.flag.clone()
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }
 
-    fn short_flags_with_args(&self) -> HashMap<String, String> {
-        self.iter()
-            .filter_map(|flag_obj| {
-                if flag_obj.is_short && flag_obj.arg.is_some() {
-                    flag_obj.flag.clone().zip(flag_obj.arg.clone())
-                } else {
-                    None
-                }
-            })
-            .collect()
-    }
+        fn all_bool_flags(&self) -> Vec<String> {
+            self.iter()
+                .filter_map(|flag_obj| {
+                    if (flag_obj.is_short || flag_obj.is_long) && flag_obj.arg.is_none() {
+                        flag_obj.flag.clone()
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }
 
-    fn long_flags_with_args(&self) -> HashMap<String, String> {
-        self.iter()
-            .filter_map(|flag_obj| {
-                if flag_obj.is_long && flag_obj.arg.is_some() {
-                    flag_obj.flag.clone().zip(flag_obj.arg.clone())
-                } else {
-                    None
-                }
-            })
-            .collect()
-    }
+        fn short_flags_with_args(&self) -> HashMap<String, String> {
+            self.iter()
+                .filter_map(|flag_obj| {
+                    if flag_obj.is_short && flag_obj.arg.is_some() {
+                        flag_obj.flag.clone().zip(flag_obj.arg.clone())
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }
 
-    fn all_flags_with_args(&self) -> HashMap<String, String> {
-        self.iter()
-            .filter_map(|flag_obj| {
-                if (flag_obj.is_short || flag_obj.is_long) && flag_obj.arg.is_some() {
-                    flag_obj.flag.clone().zip(flag_obj.arg.clone())
-                } else {
-                    None
-                }
-            })
-            .collect()
+        fn long_flags_with_args(&self) -> HashMap<String, String> {
+            self.iter()
+                .filter_map(|flag_obj| {
+                    if flag_obj.is_long && flag_obj.arg.is_some() {
+                        flag_obj.flag.clone().zip(flag_obj.arg.clone())
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }
+
+        fn all_flags_with_args(&self) -> HashMap<String, String> {
+            self.iter()
+                .filter_map(|flag_obj| {
+                    if (flag_obj.is_short || flag_obj.is_long) && flag_obj.arg.is_some() {
+                        flag_obj.flag.clone().zip(flag_obj.arg.clone())
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }
     }
 }
